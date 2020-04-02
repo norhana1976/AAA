@@ -1,0 +1,47 @@
+server:
+   port: 9999
+  
+spring:
+  application:
+      name: zuul
+  h2:
+    console:
+      enabled: true
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driverClassName: org.h2.Driver
+    username: sa
+    password: password
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+
+zuul:
+  sensitiveHeaders: Cookie,Set-Cookie
+  routes:
+    auth:
+      path: /auth/**
+      serviceId: auth
+    dummy:
+      path: /dummy/**
+      serviceId: dummy
+      
+security:
+  oauth2:
+    resource:
+      opaque-token:
+        introspection-uri: http://localhost:8080/auth/realms/tcj-cl/protocol/openid-connect/token/introspect
+        client-id: cl-app
+        client-secret: 9e46cbb5-8523-4395-9be3-712d44e1d784
+        
+logging:
+  level:
+    org:
+      springframework: DEBUG
+        #cloud:
+          #netflix: DEBUG
+      hibernate:
+        SQL: DEBUG
+        type:
+          descriptor:
+            sql: 
+              BasicBinder: TRACE          
